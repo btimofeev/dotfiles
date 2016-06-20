@@ -58,6 +58,7 @@ PROMPT="%{$STARTCOLOR%}%n@%m %# > %{$reset_color%}"
 RPROMPT="%{$STARTCOLOR%}%~/%{$reset_color%}"
 
 alias l='ls -lh --color=auto'
+alias ll='ls -lha --color=auto'
 export QUOTING_STYLE=literal # отлючаем кавычки в выводе комманды ls
 alias grep='grep --color=auto'
 alias df='df -h'
