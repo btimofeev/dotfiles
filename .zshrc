@@ -58,7 +58,6 @@ PROMPT="%{$STARTCOLOR%}%n@%m %# > %{$reset_color%}"
 RPROMPT="%{$STARTCOLOR%}%~/%{$reset_color%}"
 
 alias l='ls -lh --color=auto'
-alias ll='ls -lha --color=auto'
 export QUOTING_STYLE=literal # отлючаем кавычки в выводе комманды ls
 alias grep='grep --color=auto'
 alias df='df -h'
@@ -94,6 +93,11 @@ GPG_TTY=$(tty)
 export GPG_TTY
 
 export GOPATH=$HOME/dev/go
-export PATH=$PATH:$GOPATH/bin
-
 export ANDROID_HOME=$HOME/bin/dev/android-sdk
+
+export PATH=$PATH:$GOPATH/bin:$ANDROID_HOME/platform-tools
+
+#export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
+export WORKON_HOME=~/.virtualenvs
+source /usr/share/virtualenvwrapper/virtualenvwrapper.sh
+
