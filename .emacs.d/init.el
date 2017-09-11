@@ -95,9 +95,11 @@
 ;; Display line numbers
 (require 'linum)
 (line-number-mode   t)
-(global-linum-mode  t)
+(global-linum-mode  0)
 (column-number-mode t)
 (setq linum-format " %d")
+(add-hook 'prog-mode-hook 'linum-mode)
+(add-hook 'text-mode-hook 'linum-mode)
 
 ;; Fringe settings
 (fringe-mode '(8 . 0)) ;; органичиталь текста только слева
@@ -116,7 +118,11 @@
 (global-set-key (kbd "<f2>") 'bs-show) ;; запуск buffer selection кнопкой F2
 
 ;; Theme
-(load-theme 'monokai t)
+(add-to-list 'custom-theme-load-path "~/.emacs.d/themes/")
+;(load-theme 'monokai t)
+;(load-theme 'zenburn t)
+;(load-theme 'dracula t)
+(load-theme 'sanityinc-tomorrow-eighties t)
 
 ;; Scrolling settings
 (setq scroll-step               1)
@@ -149,12 +155,18 @@
 (setq org-startup-indented t)
 (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
 
+;; FB2-mode
+(add-to-list 'load-path "~/.emacs.d/lisp/fb2-mode")
+(require 'fb2-mode)
+
+;; nov.el epub reader
+(add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode))
+
 ;; Proxy
 ;;(setq url-proxy-services
 ;;   '(("no_proxy" . "^\\(localhost\\|10.*\\)")
 ;;     ("http" . "192.168.100.1:3128")
 ;;     ("https" . "192.168.100.1:3128")))
-
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -163,10 +175,13 @@
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
    (quote
-    ("c7a9a68bd07e38620a5508fef62ec079d274475c8f92d75ed0c33c45fbe306bc" default)))
+    ("628278136f88aa1a151bb2d6c8a86bf2b7631fbea5f0f76cba2a0079cd910f7d" "d9129a8d924c4254607b5ded46350d68cc00b6e38c39fc137c3cfb7506702c12" "c7a9a68bd07e38620a5508fef62ec079d274475c8f92d75ed0c33c45fbe306bc" default)))
  '(org-agenda-files
    (quote
-    ("~/documents/org/UniPatcher.org" "~/documents/org/emunix.org.org" "~/documents/org/personal.org"))))
+    ("~/documents/org/UniPatcher.org" "~/documents/org/emunix.org.org" "~/documents/org/personal.org" "~/documents/org/work.org")))
+ '(package-selected-packages
+   (quote
+    (magit nov monokai-theme markdown-mode lua-mode go-mode dracula-theme dired+ color-theme-sanityinc-tomorrow auto-complete alert))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
