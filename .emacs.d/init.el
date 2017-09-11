@@ -155,6 +155,10 @@
 (setq org-startup-indented t)
 (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
 
+;; DocView (pdf reader)
+(require 'doc-view)
+(setq doc-view-resolution 300)
+
 ;; FB2-mode
 (add-to-list 'load-path "~/.emacs.d/lisp/fb2-mode")
 (require 'fb2-mode)
@@ -175,7 +179,7 @@
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
    (quote
-    ("628278136f88aa1a151bb2d6c8a86bf2b7631fbea5f0f76cba2a0079cd910f7d" "d9129a8d924c4254607b5ded46350d68cc00b6e38c39fc137c3cfb7506702c12" "c7a9a68bd07e38620a5508fef62ec079d274475c8f92d75ed0c33c45fbe306bc" default)))
+    ("3629b62a41f2e5f84006ff14a2247e679745896b5eaa1d5bcfbc904a3441b0cd" "628278136f88aa1a151bb2d6c8a86bf2b7631fbea5f0f76cba2a0079cd910f7d" "d9129a8d924c4254607b5ded46350d68cc00b6e38c39fc137c3cfb7506702c12" "c7a9a68bd07e38620a5508fef62ec079d274475c8f92d75ed0c33c45fbe306bc" default)))
  '(org-agenda-files
    (quote
     ("~/documents/org/UniPatcher.org" "~/documents/org/emunix.org.org" "~/documents/org/personal.org" "~/documents/org/work.org")))
