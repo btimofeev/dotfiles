@@ -155,6 +155,10 @@
 (setq org-startup-indented t)
 (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
 
+;; Magit
+(require 'magit)
+(global-set-key (kbd "C-x g") 'magit-status)
+
 ;; DocView (pdf reader)
 (require 'doc-view)
 (setq doc-view-resolution 300)
@@ -165,6 +169,13 @@
 
 ;; nov.el epub reader
 (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode))
+
+;; easy-hugo
+(setq exec-path (append exec-path '("~/dev/go/bin"))) ;; directory with hugo executable
+(setq easy-hugo-basedir "~/dev/web/emunix-hugo/")
+(setq easy-hugo-url "https://emunix.org")
+(setq easy-hugo-previewtime "300")
+(define-key global-map (kbd "C-c C-e") 'easy-hugo)
 
 ;; Proxy
 ;;(setq url-proxy-services
@@ -185,7 +196,7 @@
     ("~/documents/org/UniPatcher.org" "~/documents/org/emunix.org.org" "~/documents/org/personal.org" "~/documents/org/work.org")))
  '(package-selected-packages
    (quote
-    (magit nov monokai-theme markdown-mode lua-mode go-mode dracula-theme dired+ color-theme-sanityinc-tomorrow auto-complete alert))))
+    (easy-hugo magit nov monokai-theme markdown-mode lua-mode go-mode dracula-theme dired+ color-theme-sanityinc-tomorrow auto-complete alert))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
