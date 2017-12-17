@@ -1,6 +1,4 @@
-;; -*- mode: elisp -*-
-
-;; System-type definition
+;; Определяем операционную систему
 (defun system-is-linux()
     (string-equal system-type "gnu/linux"))
 
@@ -10,58 +8,79 @@
 (defun system-is-windows()
     (string-equal system-type "windows-nt"))
 
-;; Start Emacs as a server
-(unless (system-is-windows)
-  (require 'server)
-  (unless (server-running-p)
-    (server-start)))
+;; Настраиваем адрес прокси-сервера
+(when (system-is-windows)
+  (setq url-proxy-services
+    '(("no_proxy" . "^\\(localhost\\|10.*\\)")
+     ("http" . "192.168.100.1:3128")
+     ("https" . "192.168.100.1:3128"))))
 
-;; Repositories
+;; Добавляем репозирории
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
+;;(add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
+;;(add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/"))
 (setq package-enable-at-startup nil)
 (package-initialize)
 
-;; Directory for additional modules
+;; Устанавливаем use-package если не установлен
+(unless (package-installed-p 'use-package)
+  (message "EMACS install use-package.el")
+  (package-refresh-contents)
+  (package-install 'use-package))
+
+;; Загружаем use-package
+(eval-when-compile
+  (require 'use-package))
+(require 'bind-key)
+;;(setq use-package-always-ensure t) ;; автоматически устанавливаем остальные пакеты, при необходимости
+
+;; Директория для дополнительных модулей
 (add-to-list 'load-path "~/.emacs.d/lisp")
 
-;; My name and e-mail adress
+;; Директория для бэкапов
+(setq backup-directory-alist `(("." . "~/.emacs.d/bakups")))
+
+;; Запускаем Emacs как сервер
+(use-package server
+  :unless (and (system-is-windows) (server-running-p))
+  :config
+    (server-start))
+
+;; Заполняем личные данные
 (setq user-full-name   "Boris Timofeev"
       user-mail-adress "btimofeev@emunix.org")
 
-;; GUI components
-(tool-bar-mode     -1)
-(blink-cursor-mode -1)
-(setq use-dialog-box     nil)
-(setq redisplay-dont-pause t)
-(setq ring-bell-function 'ignore)
+;; Настраиваем компоненты GUI
+(tool-bar-mode     -1) ;; выключить тулбар
+(blink-cursor-mode -1) ;; не мигать курсором
+(setq use-dialog-box     nil) ;; не показывать диалоги
+(setq redisplay-dont-pause t) ;; не прерывать перересовку экрана при событиях ввода 
+(setq ring-bell-function 'ignore) ;; не мигать экраном
+(defalias 'yes-or-no-p 'y-or-n-p) ;; принимать y/n вместо yes/no
+(setq frame-title-format "GNU Emacs: %b") ;; отображать имя буфера в строке заголовка
+(setq inhibit-startup-screen t) ;; не показывать экран помощи при старте
+(fringe-mode '(8 . 0)) ;; органичитель текста только слева
+(size-indication-mode t) ;; отображать размер файла в строке статуса
+(global-visual-line-mode t) ;; переносить строки во всех буферах
 
-;; Short command confirmation
-(defalias 'yes-or-no-p 'y-or-n-p)
+(global-hl-line-mode 1) ;; подсвечивать текущую строку
+(show-paren-mode t) ;; подсвечивать скобки {}, [], ()
+(electric-pair-mode    1) ;; автоматически закрывать скобки {}, [], ()
+(delete-selection-mode t) ;; удалять выделенный текст при вводе текста
 
-;; Display the name of the current buffer in the title bar
-(setq frame-title-format "GNU Emacs: %b")
+(setq scroll-step 1) ;; при скролле сдвигать экран по 1 строке
+(setq mouse-wheel-scroll-amount '(1 ((shift) . 1))) ;; мышью также
 
-;; Inhibit startup/splash screen
-(setq inhibit-splash-screen   t)
-(setq inhibit-startup-message t)
+(define-key global-map [(insert)] nil) ;; Ins не включает режим замены
 
-;; Highlight current line
-(global-hl-line-mode 1)
+;; Цветовая тема
+(add-to-list 'custom-theme-load-path "~/.emacs.d/themes/")
+(load-theme 'sanityinc-tomorrow-eighties t)
 
-;; Highlight {}, [], ()
-(show-paren-mode t)
+(set-language-environment 'utf-8) ;; кодировка текста
 
-;; Autoclose {}, [], ()
-(electric-pair-mode    1)
-
-;; Delete selection
-(delete-selection-mode t)
-
-;; Coding-system settings
-(set-language-environment 'utf-8)
-
-;; change coding for current buffer
+;; Функция меняет кодировку текста для текущего буфера
 (setq my-working-codings ["utf-8" "windows-1251" "koi8-r" "cp866"])
 (setq my-current-coding-index -1)
 (defun pa23-change-coding ()
@@ -92,96 +111,96 @@
   )
 (global-set-key [f11] 'pa23-change-coding)
 
-;; Display line numbers
-(require 'linum)
-(line-number-mode   t)
-(global-linum-mode  0)
-(column-number-mode t)
-(setq linum-format " %d")
-(add-hook 'prog-mode-hook 'linum-mode)
-(add-hook 'text-mode-hook 'linum-mode)
+;; Отображать номера строк
+(use-package linum
+  :hook ((prog-mode . linum-mode)  ;; только для кода
+         (text-mode . linum-mode)) ;; и обычного текста, ибо просмотр pdf тормозит из-за этого режима
+  :config
+  (progn
+    (line-number-mode   t)
+    (global-linum-mode  0)
+    (column-number-mode t)
+    (setq linum-format " %d")))
 
-;; Fringe settings
-(fringe-mode '(8 . 0)) ;; органичиталь текста только слева
+;; Сохранять и восстанавливать позицию курсора в файле
+(use-package saveplace
+  :init (save-place-mode 1))
 
-;; Display file size in mode-line
-(size-indication-mode          t)
+(use-package bs
+  :bind ("C-x C-b" . bs-show)) ;; диалог выбора буфера
 
-;; Line wrapping
-(setq word-wrap          t)
-(global-visual-line-mode t)
+(use-package ibuffer
+  :bind ("<f2>" . ibuffer)) ;; отдельный список буферов
 
-;; Buffer Selection and ibuffer settings
-(require 'bs)
-(require 'ibuffer)
-(defalias 'list-buffers 'ibuffer) ;; отдельный список буферов при нажатии C-x C-b
-(global-set-key (kbd "<f2>") 'bs-show) ;; запуск buffer selection кнопкой F2
-
-;; Theme
-(add-to-list 'custom-theme-load-path "~/.emacs.d/themes/")
-;(load-theme 'monokai t)
-;(load-theme 'zenburn t)
-;(load-theme 'dracula t)
-(load-theme 'sanityinc-tomorrow-eighties t)
-
-;; Scrolling settings
-(setq scroll-step               1)
-(setq mouse-wheel-scroll-amount '(1 ((shift) . 1)))
-(setq scroll-margin            5)
-(setq mouse-wheel-follow-mouse 't)
-
-;; Easy transition between buffers: M-arrow-keys
+;; Перемещаться между окнами через M-стрелки
 (if (equal nil (equal major-mode 'org-mode))
     (windmove-default-keybindings 'meta))
 
 ;; IDO
-(require 'ido)
-(ido-mode t)
-(when (system-is-windows) ;; avoid freezes on windows 7
-   (setq ido-enable-last-directory-history nil)
-   (setq ido-record-commands nil)
-   (setq ido-max-work-directory-list 0)
-   (setq ido-max-work-file-list 0))
+(use-package ido
+  :init (ido-mode t)
+  :config
+    (when (system-is-windows) ;; отключаем часть, т.к. в Windows 7 подвисает
+      (setq ido-enable-last-directory-history nil)
+      (setq ido-record-commands nil)
+      (setq ido-max-work-directory-list 0)
+      (setq ido-max-work-file-list 0)))
 
 ;; Dired+
-(require 'dired+)
-(diredp-toggle-find-file-reuse-dir 1)
+(use-package dired+
+  :config (diredp-toggle-find-file-reuse-dir 1))
 
-;; Org-mode settings
-(require 'org)
-(global-set-key "\C-ca" 'org-agenda)
-(global-set-key "\C-cb" 'org-iswitchb)
-(global-set-key "\C-cl" 'org-store-link)
-(setq org-startup-indented t)
-(add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
+;; Org-mode
+(use-package org
+  :mode ("\\.org$" . org-mode)
+  :bind (("C-c a" . org-agenda)
+         ("C-c b" . org-iswitchb)
+         ("C-c l" . org-store-link)
+         ("C-c c" . org-capture))
+  :config
+  (progn
+    (setq org-startup-indented t)
+    (setq org-default-notes-file "~/documents/org/notes.org")))
 
 ;; Magit
-(require 'magit)
-(global-set-key (kbd "C-x g") 'magit-status)
+(use-package magit
+  :bind ("C-x g" . magit-status))
+
+;; Отображать скрытые символы
+(use-package whitespace
+  :bind ("<f9>" . whitespace-mode))
+
+;; Для работы горячих клавиш в русской раскладке
+(use-package reverse-im
+  :ensure t
+  :config
+  (reverse-im-activate "russian-computer"))
 
 ;; DocView (pdf reader)
-(require 'doc-view)
-(setq doc-view-resolution 300)
+(use-package doc-view
+  :commands doc-view-mode
+  :config
+  (setq doc-view-resolution 300)
+  (define-key doc-view-mode-map (kbd "<right>") 'doc-view-next-page)
+  (define-key doc-view-mode-map (kbd "<left>") 'doc-view-previous-page))
 
 ;; FB2-mode
-(add-to-list 'load-path "~/.emacs.d/lisp/fb2-mode")
-(require 'fb2-mode)
+(use-package fb2-mode
+  :load-path "~/.emacs.d/lisp/fb2-mode"
+  :mode ("\\.fb2$" . fb2-mode)
+  :ensure nil)
 
 ;; nov.el epub reader
-(add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode))
+(use-package nov
+  :mode ("\\.epub$" . nov-mode))
 
 ;; easy-hugo
-(setq exec-path (append exec-path '("~/dev/go/bin"))) ;; directory with hugo executable
-(setq easy-hugo-basedir "~/dev/web/emunix-hugo/")
-(setq easy-hugo-url "https://emunix.org")
-(setq easy-hugo-previewtime "300")
-(define-key global-map (kbd "C-c C-e") 'easy-hugo)
-
-;; Proxy
-;;(setq url-proxy-services
-;;   '(("no_proxy" . "^\\(localhost\\|10.*\\)")
-;;     ("http" . "192.168.100.1:3128")
-;;     ("https" . "192.168.100.1:3128")))
+(use-package easy-hugo
+  :bind ("C-c C-e" . easy-hugo)
+  :config ((setq exec-path (append exec-path '("~/dev/go/bin"))) ;; directory with hugo executable
+           (setq easy-hugo-basedir "~/dev/web/emunix-hugo/")
+           (setq easy-hugo-url "https://emunix.org")
+           (setq easy-hugo-previewtime "300")))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -190,13 +209,11 @@
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
    (quote
-    ("3629b62a41f2e5f84006ff14a2247e679745896b5eaa1d5bcfbc904a3441b0cd" "628278136f88aa1a151bb2d6c8a86bf2b7631fbea5f0f76cba2a0079cd910f7d" "d9129a8d924c4254607b5ded46350d68cc00b6e38c39fc137c3cfb7506702c12" "c7a9a68bd07e38620a5508fef62ec079d274475c8f92d75ed0c33c45fbe306bc" default)))
- '(org-agenda-files
-   (quote
-    ("~/documents/org/UniPatcher.org" "~/documents/org/emunix.org.org" "~/documents/org/personal.org" "~/documents/org/work.org")))
+    ("d9129a8d924c4254607b5ded46350d68cc00b6e38c39fc137c3cfb7506702c12" "628278136f88aa1a151bb2d6c8a86bf2b7631fbea5f0f76cba2a0079cd910f7d" "c7a9a68bd07e38620a5508fef62ec079d274475c8f92d75ed0c33c45fbe306bc" default)))
+ '(org-agenda-files (quote ("~/Documents/org/work.org")))
  '(package-selected-packages
    (quote
-    (easy-hugo magit nov monokai-theme markdown-mode lua-mode go-mode dracula-theme dired+ color-theme-sanityinc-tomorrow auto-complete alert))))
+    (use-package reverse-im monokai-theme ducpel dracula-theme dired+ diminish color-theme-sanityinc-tomorrow))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
