@@ -179,6 +179,13 @@
   :config
   (reverse-im-activate "russian-computer"))
 
+;; Отображать подсказки по горячим клавишам
+(use-package which-key
+  :ensure t
+  :config
+  (which-key-setup-side-window-right)
+  (which-key-mode))
+
 ;; DocView (pdf reader)
 (use-package doc-view
   :commands doc-view-mode
@@ -216,7 +223,7 @@
  '(org-agenda-files (quote ("~/Documents/org/work.org")))
  '(package-selected-packages
    (quote
-    (use-package reverse-im monokai-theme ducpel dracula-theme dired+ diminish color-theme-sanityinc-tomorrow))))
+    (which-key pkgbuild-mode use-package reverse-im monokai-theme ducpel dracula-theme dired+ diminish color-theme-sanityinc-tomorrow))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
