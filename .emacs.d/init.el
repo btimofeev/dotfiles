@@ -43,9 +43,11 @@
 
 ;; Запускаем Emacs как сервер
 (use-package server
-  :unless (and (system-is-windows) (server-running-p))
+  :ensure t
+  :init (server-mode 1)
   :config
-    (server-start))
+  (unless (server-running-p)
+    (server-start)))
 
 ;; Заполняем личные данные
 (setq user-full-name   "Boris Timofeev"
