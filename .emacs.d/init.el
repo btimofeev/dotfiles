@@ -115,15 +115,18 @@
 (global-set-key [f11] 'pa23-change-coding)
 
 ;; Отображать номера строк
-(use-package linum
-  :hook ((prog-mode . linum-mode)  ;; только для кода
-         (text-mode . linum-mode)) ;; и обычного текста, ибо просмотр pdf тормозит из-за этого режима
-  :config
-  (progn
-    (line-number-mode   t)
-    (global-linum-mode  0)
-    (column-number-mode t)
-    (setq linum-format " %d")))
+(if (version< emacs-version "26.1")
+    (use-package linum
+      :hook ((prog-mode . linum-mode)  ;; только для кода
+             (text-mode . linum-mode)) ;; и обычного текста, ибо просмотр pdf тормозит из-за этого режима
+      :config
+      (progn
+        (line-number-mode   t)
+        (global-linum-mode  0)
+        (column-number-mode t)
+        (setq linum-format " %d")))
+  ;; в емаксе 26.1 и выше используем более быструю встроенную нумерацию строк:
+  (global-display-line-numbers-mode))
 
 ;; Сохранять и восстанавливать позицию курсора в файле
 (use-package saveplace
@@ -223,7 +226,7 @@
  '(org-agenda-files (quote ("~/Documents/org/work.org")))
  '(package-selected-packages
    (quote
-    (which-key pkgbuild-mode use-package reverse-im monokai-theme ducpel dracula-theme dired+ diminish color-theme-sanityinc-tomorrow))))
+    (groovy-mode gradle-mode which-key pkgbuild-mode use-package reverse-im monokai-theme ducpel dracula-theme dired+ diminish color-theme-sanityinc-tomorrow))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
