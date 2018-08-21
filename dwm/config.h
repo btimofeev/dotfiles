@@ -1,24 +1,33 @@
 /* See LICENSE file for copyright and license details. */
-#include <X11/XF86keysym.h>
 
 /* appearance */
 static const char *fonts[] = {
-	"terminus:size=10"
+	"xos4 Terminus:size=10"
 };
-static const char dmenufont[]       = "terminus:size=10";
+static const char dmenufont[]       = "xos4 Terminus:size=10";
+
+/* default colors
 static const char normbordercolor[] = "#444444";
 static const char normbgcolor[]     = "#222222";
 static const char normfgcolor[]     = "#bbbbbb";
 static const char selbordercolor[]  = "#005577";
 static const char selbgcolor[]      = "#005577";
 static const char selfgcolor[]      = "#eeeeee";
+*/
+
+static const char normbordercolor[] = "#2f343f";
+static const char normbgcolor[]     = "#2f343f";
+static const char normfgcolor[]     = "#ffffff";
+static const char selbordercolor[]  = "#5294e2";
+static const char selbgcolor[]      = "#404552";
+static const char selfgcolor[]      = "#ffffff";
 static const unsigned int borderpx  = 1;        /* border pixel of windows */
 static const unsigned int snap      = 32;       /* snap pixel */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
 
 /* tagging */
-static const char *tags[] = { "term", "web", "dev", "media", "im", "other" };
+static const char *tags[] = { "term", "web", "dev", "im", "media", "other" };
 
 static const Rule rules[] = {
 	/* xprop(1):
@@ -28,6 +37,8 @@ static const Rule rules[] = {
 	/* class      instance    title       tags mask     isfloating   monitor */
 	{ "Gimp",     NULL,       NULL,       0,            0,           -1 },
 	{ "Firefox",  NULL,       NULL,       1 << 1,       0,           -1 },
+	{ "PaleMoon", NULL,       NULL,       1 << 1,       0,           -1 },
+        { "Telegram", NULL,       NULL,       1 << 3,       0,           -1 },
 };
 
 /* layout(s) */
@@ -57,21 +68,27 @@ static const Layout layouts[] = {
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", normbgcolor, "-nf", normfgcolor, "-sb", selbgcolor, "-sf", selfgcolor, NULL };
 static const char *termcmd[]  = { "st", NULL };
-static const char *incr_sound[]  = { "amixer", "set", "Master", "2dB+",	 NULL };
-static const char *decr_sound[]	 = { "amixer", "set", "Master", "2dB-",	 NULL };
+static const char *incr_sound[]  = {"pactl", "set-sink-volume", "0", "+5%", NULL };  /* { "amixer", "-q", "set", "Master", "3dB+", NULL }; */
+static const char *decr_sound[]	 = {"pactl", "set-sink-volume", "0", "-5%", NULL };  /* { "amixer", "-q", "set", "Master", "3dB-", NULL }; */
+static const char *mute[] = { "pactl", "set-sink-mute", "0", "toggle", NULL }; /* { "amixer", "-q", "set", "Master", "toggle", NULL }; */
 static const char *browser[] = { "firefox", NULL };
 static const char *pass_manager[] = { "passmenu", "-fn", dmenufont, "-nb", normbgcolor, "-nf", normfgcolor, "-sb", selbgcolor, "-sf", selfgcolor, NULL };
 static const char *appfinder[] = { "xfce4-appfinder", NULL };
+static const char *emacs[] = { "emacs", NULL };
 
 static Key keys[] = {
 	/* modifier                     key        function        argument */
 	{ MODKEY,                       XK_d,      spawn,          {.v = dmenucmd } },
 	{ MODKEY,                       XK_Return, spawn,          {.v = termcmd } },
-    { 0,                            XF86XK_AudioRaiseVolume,      spawn,         {.v = incr_sound } },
-	{ 0,	                        XF86XK_AudioLowerVolume,	  spawn,	   {.v = decr_sound } },
-    { MODKEY,                       XK_c,      spawn,          {.v = browser } },
-    { MODKEY,                       XK_p,      spawn,          {.v = pass_manager } },
-    { MODKEY,                       XK_a,      spawn,          {.v = appfinder } },
+        { MODKEY,                       XK_equal,  spawn,          {.v = incr_sound } },
+	{ MODKEY,                       XK_minus,  spawn,          {.v = decr_sound } },
+        { MODKEY,                       XK_KP_Add, spawn,          {.v = incr_sound } },
+	{ MODKEY,                       XK_KP_Subtract,  spawn,    {.v = decr_sound } },
+        { MODKEY,                       XK_BackSpace,   spawn,     {.v = mute } },
+        { MODKEY,                       XK_c,      spawn,          {.v = browser } },
+        { MODKEY,                       XK_p,      spawn,          {.v = pass_manager } },
+        { MODKEY,                       XK_a,      spawn,          {.v = appfinder } },
+        { MODKEY,                       XK_e,      spawn,          {.v = emacs } },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
 	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },
