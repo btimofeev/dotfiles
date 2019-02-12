@@ -42,12 +42,12 @@
 (setq backup-directory-alist `(("." . "~/.emacs.d/bakups")))
 
 ;; Запускаем Emacs как сервер
-(use-package server
-  :ensure t
-  :init (server-mode 1)
-  :config
-  (unless (server-running-p)
-    (server-start)))
+;; (use-package server
+;;   :ensure t
+;;   :init (server-mode 1)
+;;   :config
+;;   (unless (server-running-p)
+;;     (server-start)))
 
 ;; Заполняем личные данные
 (setq user-full-name   "Boris Timofeev"
@@ -154,7 +154,11 @@
 
 ;; Dired+
 (use-package dired+
-  :config (diredp-toggle-find-file-reuse-dir 1))
+  :init
+  (progn
+    (setq diredp-hide-details-initially-flag nil))
+  :config
+  (diredp-toggle-find-file-reuse-dir 1))
 
 ;; Org-mode
 (use-package org
@@ -215,23 +219,64 @@
            (setq easy-hugo-url "https://emunix.org")
            (setq easy-hugo-previewtime "300")))
 
+;; emms
+(use-package emms-setup
+  :config
+  (emms-all)
+  (emms-default-players))
+
+(use-package emms-volume)
+
+(use-package emms
+  :bind ("<f12>" . emms)
+  :config
+  (progn
+    (setq emms-playlist-buffer-name "Music-EMMS")
+    (setq emms-source-file-default-directory "~/music/"))
+    (define-emms-simple-player xmp '(file)
+      (regexp-opt '(".AMF" ".ADSC" ".669" ".DIGI" ".DBM" ".MDL" ".PSM" ".FAR"
+         		".FT" ".XM" ".GMC" ".IMF" ".IT" ".LIQ" ".MTM" ".NTP"
+	        	".MMD0" ".MMD1" ".MMD2" ".MMD3" ".OKTA"	".PTM" ".MOD"
+		        ".PT36" ".EMOD" ".RTM" ".STM" ".S3M" ".SFX" ".ST26" ".ULT"
+		        ".amf" ".adsc" ".digi" ".dbm" ".mdl" ".psm" ".far"
+		        ".ft" ".xm" ".gmc" ".imf" ".it" ".liq" ".mtm" ".ntp"
+		        ".mmd0" ".mmd1" ".mmd2" ".mmd3" ".okta"	".ptm" ".mod"
+                        ".pt36" ".emod" ".rtm" ".stm" ".s3m" ".sfx" ".st26" ".ult")) "xmp" "-q")
+    (define-emms-simple-player zxtune123 '(file)
+      (regexp-opt '(".pt3" ".PT3" ".ay" ".AY" ".stp" ".STP" ".stc" ".STC"
+                    ".stp1" ".STP1" ".pt2" ".PT2"
+                    ".vgm" ".VGM" ".vgz" ".VGZ" ".nsf" ".NSF" ".spc" ".SPC" ".gbs" ".GBS")) "zxtune123" "--silent")
+    (add-to-list 'emms-player-list 'emms-player-xmp)
+    (add-to-list 'emms-player-list 'emms-player-zxtune123))
+
+;; elfeed
+(use-package elfeed
+  :bind ("C-x w" . elfeed)
+  :config (setq elfeed-feeds '("http://love2d.org/releases.xml")))
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(blink-cursor-mode nil)
  '(custom-safe-themes
    (quote
     ("d9129a8d924c4254607b5ded46350d68cc00b6e38c39fc137c3cfb7506702c12" "628278136f88aa1a151bb2d6c8a86bf2b7631fbea5f0f76cba2a0079cd910f7d" "c7a9a68bd07e38620a5508fef62ec079d274475c8f92d75ed0c33c45fbe306bc" default)))
+ '(global-display-line-numbers-mode t)
  '(org-agenda-files (quote ("~/Documents/org/work.org")))
  '(package-selected-packages
    (quote
-    (groovy-mode gradle-mode which-key pkgbuild-mode use-package reverse-im monokai-theme ducpel dracula-theme dired+ diminish color-theme-sanityinc-tomorrow))))
+    (elfeed love-minor-mode gnugo emms groovy-mode gradle-mode which-key pkgbuild-mode use-package reverse-im monokai-theme ducpel dracula-theme dired+ diminish color-theme-sanityinc-tomorrow)))
+ '(show-paren-mode t)
+ '(size-indication-mode t)
+ '(tool-bar-mode nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(default ((t (:family "Hack" :foundry "SRC" :slant normal :weight normal :height 98 :width normal))))
  '(org-level-1 ((t (:inherit default :foreground "#FD971F" :height 1.0))))
  '(org-level-2 ((t (:inherit default :foreground "#A6E22E" :height 1.0))))
  '(org-level-3 ((t (:inherit default :foreground "#66D9EF" :height 1.0))))
