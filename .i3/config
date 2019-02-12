@@ -18,19 +18,22 @@ set $mod Mod4
 # clear in small sizes. However, if you need a lot of unicode glyphs or
 # right-to-left text rendering, you should instead use pango for rendering and
 # chose an xft font, such as:
-font xft:Terminus 9
+font pango:Hack 10  #xft:Terminus 9
 
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
 
+# Title alignment
+title_align center
+
 # start a terminal
-bindsym $mod+Return exec i3-sensible-terminal
+bindsym $mod+Return exec st
 
 # kill focused window
 bindsym $mod+Escape kill
 
 # start dmenu (a program launcher)
-bindsym $mod+d exec dmenu_run -fn "-xos4-terminus-medium-*-*-*-12-*-*-*-*-*"
+bindsym $mod+d exec dmenu_run -m dmenumon -fn "xos4 Terminus:size=10" -nb "#222222" -nf "#bbbbbb" -sb "#005577" -sf "#eeeeee"
 
 # change focus
 bindsym $mod+h focus left
@@ -57,7 +60,7 @@ bindsym $mod+Shift+Up move up
 bindsym $mod+Shift+Right move right
 
 # split in horizontal orientation
-bindsym $mod+b split h
+bindsym $mod+g split h
 
 # split in vertical orientation
 bindsym $mod+v split v
@@ -66,7 +69,7 @@ bindsym $mod+v split v
 bindsym $mod+f fullscreen
 
 # change container layout (stacked, tabbed, toggle split)
-# bindsym $mod+s layout stacking
+#bindsym $mod+s layout stacking
 bindsym $mod+w layout tabbed
 bindsym $mod+e layout toggle split
 
@@ -77,10 +80,10 @@ bindsym $mod+Shift+space floating toggle
 bindsym $mod+space focus mode_toggle
 
 # focus the parent container
-# bindsym $mod+a focus parent
+bindsym $mod+u focus parent
 
 # focus the child container
-# bindsym $mod+z focus child
+bindsym $mod+i focus child
 
 # switch to workspace
 bindsym $mod+1 workspace 1
@@ -106,12 +109,16 @@ bindsym $mod+Shift+8 move container to workspace 8
 bindsym $mod+Shift+9 move container to workspace 9
 bindsym $mod+Shift+0 move container to workspace 10
 
+# scratchpad
+bindsym $mod+Shift+minus move scratchpad
+bindsym $mod+minus scratchpad show
+
 # reload the configuration file
 bindsym $mod+Shift+c reload
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
 bindsym $mod+Shift+r restart
 # exit i3 (logs you out of your X session)
-bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
+bindsym $mod+Shift+e exec exit # "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
 
 # resize window (you can also use the mouse for that)
 mode "resize" {
@@ -145,14 +152,36 @@ bindsym XF86AudioLowerVolume exec amixer set Master 2-
 
 # applications
 bindsym $mod+a exec xfce4-appfinder
-bindsym $mod+c exec chromium
-bindsym $mod+p exec keepassx
-
-# Start i3bar to display a workspace bar (plus the system information i3status
-# finds out, if available)
-bar {
-        status_command i3status
-}
+bindsym $mod+c exec firefox
+bindsym $mod+p exec passmenu -fn "xos4 Terminus:size=10" -nb "#222222" -nf "#bbbbbb" -sb "#005577" -sf "#eeeeee"
+bindsym $mod+s exec rofi -show run
+bindsym $mod+q exec rofi -show window
 
 # default layout
 workspace_layout tabbed
+
+# class                 border  bground text    indicator child_border
+client.focused          #515151 #515151 #CCCCCC #515151   #515151
+client.focused_inactive #2D2D2D #2D2D2D #CCCCCC #2D2D2D   #2D2D2D
+client.unfocused        #393939 #393939 #888888 #393939   #393939
+client.urgent           #F2777A #F2777A #2D2D2D #F2777A   #F2777A
+client.placeholder      #000000 #0C0C0C #CCCCCC #000000   #0C0C0C
+
+client.background       #2D2D2D
+
+bar {
+  position top
+  status_command i3status
+
+  colors {
+    background #2D2D2D
+    statusline #CCCCCC
+    separator  #666666
+
+    focused_workspace  #515151 #515151 #CCCCCC
+    active_workspace   #333333 #222222 #CCCCCC
+    inactive_workspace #393939 #393939 #CCCCCC
+    urgent_workspace   #2F343A #F2777A #2D2D2D
+    binding_mode       #2F343A #F2777A #2D2D2D
+  }
+}
