@@ -255,10 +255,20 @@
   :bind ("C-x w" . elfeed)
   :config (setq elfeed-feeds '("http://love2d.org/releases.xml")))
 
-
-;; sbcl
-(load (expand-file-name "~/quicklisp/slime-helper.el"))
-(setq inferior-lisp-program "/usr/bin/sbcl")
+;; slime
+(use-package slime
+  :ensure t
+  :defer t
+  :init
+  (setq inferior-lisp-program "sbcl")
+  :config
+  (use-package slime-company
+    :ensure t)
+  (add-hook 'slime-mode-hook
+            (lambda ()
+              (load (expand-file-name "~/quicklisp/slime-helper.el"))
+              (add-to-list 'slime-contribs 'slime-fancy)
+              (add-to-list 'slime-contribs 'inferior-slime))))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -273,7 +283,7 @@
  '(org-agenda-files (quote ("~/Documents/org/work.org")))
  '(package-selected-packages
    (quote
-    (ac-slime slime elfeed love-minor-mode gnugo emms groovy-mode gradle-mode which-key pkgbuild-mode use-package reverse-im monokai-theme ducpel dracula-theme dired+ diminish color-theme-sanityinc-tomorrow)))
+    (slime-company ac-slime slime elfeed love-minor-mode gnugo emms groovy-mode gradle-mode which-key pkgbuild-mode use-package reverse-im monokai-theme ducpel dracula-theme dired+ diminish color-theme-sanityinc-tomorrow)))
  '(show-paren-mode t)
  '(size-indication-mode t)
  '(tool-bar-mode nil))
