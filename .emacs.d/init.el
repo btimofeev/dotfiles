@@ -55,6 +55,7 @@
 
 ;; Настраиваем компоненты GUI
 (tool-bar-mode     -1) ;; выключить тулбар
+(scroll-bar-mode -1) ;; выключить скроллбар
 (blink-cursor-mode -1) ;; не мигать курсором
 (setq use-dialog-box     nil) ;; не показывать диалоги
 (setq redisplay-dont-pause t) ;; не прерывать перересовку экрана при событиях ввода 
