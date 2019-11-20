@@ -110,8 +110,8 @@ bindsym $mod+Shift+9 move container to workspace 9
 bindsym $mod+Shift+0 move container to workspace 10
 
 # scratchpad
-bindsym $mod+Shift+minus move scratchpad
-bindsym $mod+minus scratchpad show
+bindsym $mod+Shift+slash move scratchpad
+bindsym $mod+slash scratchpad show
 
 # reload the configuration file
 bindsym $mod+Shift+c reload
@@ -147,14 +147,15 @@ mode "resize" {
 bindsym $mod+r mode "resize"
 
 # Audio keys
-bindsym XF86AudioRaiseVolume exec amixer set Master 2+
-bindsym XF86AudioLowerVolume exec amixer set Master 2-
+bindsym $mod+equal exec --no-startup-id pactl set-sink-volume 0 +5%
+bindsym $mod+plus exec --no-startup-id pactl set-sink-volume 0 +5%
+bindsym $mod+minus exec --no-startup-id pactl set-sink-volume 0 -5%
 
 # applications
 bindsym $mod+a exec xfce4-appfinder
 bindsym $mod+c exec firefox
 bindsym $mod+p exec passmenu -fn "xos4 Terminus:size=10" -nb "#222222" -nf "#bbbbbb" -sb "#005577" -sf "#eeeeee"
-bindsym $mod+s exec rofi -show run
+bindsym $mod+s exec "rofi -modi combi -show combi -combi-modi run,drun"
 bindsym $mod+q exec rofi -show window
 
 # default layout
