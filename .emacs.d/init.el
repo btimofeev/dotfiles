@@ -219,10 +219,9 @@
 ;; easy-hugo
 (use-package easy-hugo
   :bind ("C-c C-e" . easy-hugo)
-  :config ((setq exec-path (append exec-path '("~/dev/go/bin"))) ;; directory with hugo executable
-           (setq easy-hugo-basedir "~/dev/web/emunix-hugo/")
-           (setq easy-hugo-url "https://emunix.org")
-           (setq easy-hugo-previewtime "300")))
+  :init (setq easy-hugo-basedir "~/dev/web/emunix-hugo/")
+        (setq easy-hugo-url "https://emunix.org")
+        (setq easy-hugo-previewtime "300"))
 
 ;; emms
 (use-package emms-setup
