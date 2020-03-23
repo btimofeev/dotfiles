@@ -71,7 +71,11 @@
 (show-paren-mode t) ;; подсвечивать скобки {}, [], ()
 (electric-pair-mode    1) ;; автоматически закрывать скобки {}, [], ()
 (delete-selection-mode t) ;; удалять выделенный текст при вводе текста
-(setq-default indent-tabs-mode nil) ;; не конвертировать пробелы в табы
+(setq-default indent-tabs-mode t) ;; конвертировать табы в пробелы (t - нет, nil - да)
+
+;; определяем вид и количество отступов для c-кода
+(setq c-default-style "linux" 
+      c-basic-offset 8)
 
 (setq scroll-step 1) ;; при скролле сдвигать экран по 1 строке
 (setq mouse-wheel-scroll-amount '(1 ((shift) . 1))) ;; мышью также
