@@ -256,7 +256,11 @@
 ;; elfeed
 (use-package elfeed
   :bind ("C-x w" . elfeed)
-  :config (setq elfeed-feeds '("http://love2d.org/releases.xml")))
+  :config
+  (setq elfeed-feeds '("http://love2d.org/releases.xml"
+			       "https://emunix.org/index.xml"
+			       "https://habr.com/ru/rss/hub/android_dev/all/?fl=ru%2Cen"))
+  (setq elfeed-sort-order 'ascending))
 
 ;; slime
 (use-package slime
