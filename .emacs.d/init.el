@@ -35,6 +35,11 @@
 (require 'bind-key)
 ;;(setq use-package-always-ensure t) ;; автоматически устанавливаем остальные пакеты, при необходимости
 
+;; Пробуем пакеты без установки
+(use-package try
+  :ensure t
+  :defer t)
+
 ;; Директория для дополнительных модулей
 (add-to-list 'load-path "~/.emacs.d/lisp")
 
@@ -286,6 +291,37 @@
          ("\\.markdown\\'" . markdown-mode))
   :init (setq markdown-command "multimarkdown"))
 
+;; jabber.el
+(use-package jabber
+  :defer t
+  :config
+  (setq jabber-history-enabled t
+        jabber-use-global-history nil
+        fsm-debug nil)
+  :custom
+  (jabber-auto-reconnect t)
+  (jabber-chat-buffer-format "*-jc-%n-*")
+  (jabber-groupchat-buffer-format "*-jg-%n-*")
+  (jabber-chat-foreign-prompt-format "▼ [%t] %n> ")
+  (jabber-chat-local-prompt-format "▲ [%t] %n> ")
+  (jabber-muc-colorize-foreign t)
+  (jabber-muc-private-buffer-format "*-jmuc-priv-%g-%n-*")
+  (jabber-rare-time-format "%e %b %Y %H:00")
+  (jabber-resource-line-format "   %r - %s [%p]")
+  (jabber-roster-buffer "*-jroster-*")
+  (jabber-roster-line-format "%c %-17n")
+  (jabber-roster-show-title nil)
+  (jabber-roster-sort-functions (quote (jabber-roster-sort-by-status jabber-roster-sort-by-displayname jabber-roster-sort-by-group)))
+  (jabber-show-offline-contacts nil)
+  (jabber-show-resources nil))
+
+;; free-keys помогает найти незанятые сочетания клавиш
+;; Если запускать как C-u M-x free-keys то можно указать префикс вида C-x
+(use-package free-keys
+  :ensure t
+  :defer t
+  :commands free-keys)
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -295,14 +331,10 @@
  '(custom-safe-themes
    (quote
     ("d9129a8d924c4254607b5ded46350d68cc00b6e38c39fc137c3cfb7506702c12" "628278136f88aa1a151bb2d6c8a86bf2b7631fbea5f0f76cba2a0079cd910f7d" "c7a9a68bd07e38620a5508fef62ec079d274475c8f92d75ed0c33c45fbe306bc" default)))
- '(global-display-line-numbers-mode t)
  '(org-agenda-files (quote ("~/Documents/org/work.org")))
  '(package-selected-packages
    (quote
-    (slime-company ac-slime slime elfeed love-minor-mode gnugo emms groovy-mode gradle-mode which-key pkgbuild-mode use-package reverse-im monokai-theme ducpel dracula-theme dired+ diminish color-theme-sanityinc-tomorrow)))
- '(show-paren-mode t)
- '(size-indication-mode t)
- '(tool-bar-mode nil))
+    (use-package-secrets quelpa-use-package quelpa free-keys try jabber yasnippet yasnippet-snippets slime-company ac-slime slime elfeed love-minor-mode gnugo emms groovy-mode gradle-mode which-key pkgbuild-mode use-package reverse-im monokai-theme ducpel dracula-theme dired+ diminish color-theme-sanityinc-tomorrow))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
