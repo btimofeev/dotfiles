@@ -291,6 +291,8 @@
          ("\\.markdown\\'" . markdown-mode))
   :init (setq markdown-command "multimarkdown"))
 
+(global-unset-key (kbd "C-x C-j")) ;; чтобы dired не конфликтовал с jabber
+
 ;; jabber.el
 (use-package jabber
   :defer t
@@ -298,6 +300,8 @@
   (setq jabber-history-enabled t
         jabber-use-global-history nil
         fsm-debug nil)
+  :bind
+  ("C-x C-j C-c" . jabber-connect-all)
   :custom
   (jabber-auto-reconnect t)
   (jabber-chat-buffer-format "*-jc-%n-*")
