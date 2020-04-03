@@ -319,6 +319,14 @@
   (jabber-show-offline-contacts nil)
   (jabber-show-resources nil))
 
+;; Эмоджи
+(use-package emojify
+  :config (if (display-graphic-p)
+               (setq emojify-display-style 'image)
+             (setq emojify-display-style 'unicode)
+             )
+  :init (global-emojify-mode 1))
+
 ;; free-keys помогает найти незанятые сочетания клавиш
 ;; Если запускать как C-u M-x free-keys то можно указать префикс вида C-x
 (use-package free-keys
@@ -338,7 +346,7 @@
  '(org-agenda-files (quote ("~/Documents/org/work.org")))
  '(package-selected-packages
    (quote
-    (use-package-secrets quelpa-use-package quelpa free-keys try jabber yasnippet yasnippet-snippets slime-company ac-slime slime elfeed love-minor-mode gnugo emms groovy-mode gradle-mode which-key pkgbuild-mode use-package reverse-im monokai-theme ducpel dracula-theme dired+ diminish color-theme-sanityinc-tomorrow))))
+    (emojify use-package-secrets quelpa-use-package quelpa free-keys try jabber yasnippet yasnippet-snippets slime-company ac-slime slime elfeed love-minor-mode gnugo emms groovy-mode gradle-mode which-key pkgbuild-mode use-package reverse-im monokai-theme ducpel dracula-theme dired+ diminish color-theme-sanityinc-tomorrow))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
