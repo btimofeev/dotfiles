@@ -1,0 +1,23 @@
+#!/bin/sh
+#
+# ~/.xprofile
+#
+# Executed by lightdm
+
+setxkbmap -layout "us,ru(winkeys)" -option grp:ctrl_shift_toggle -option ctrl:nocaps -option grp_led:scroll
+wmname LG3D
+numlockx on
+
+while feh --randomize --bg-fill /usr/share/backgrounds/*.jpg
+    do
+        sleep 600
+    done &
+
+compton &
+gxkb &
+# clock for dwm
+#while xsetroot -name "`date +%R`"
+#    do
+#        sleep 15
+#    done &
+
