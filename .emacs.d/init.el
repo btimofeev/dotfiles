@@ -334,6 +334,13 @@
   :defer t
   :commands free-keys)
 
+;; Раскрашиваем вывод комманды M-x man
+(use-package man
+  :defer t
+  :custom-face
+  (Man-overstrike ((t (:inherit font-lock-type-face :bold t))))
+  (Man-underline ((t (:inherit font-lock-keyword-face :underline t)))))
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
