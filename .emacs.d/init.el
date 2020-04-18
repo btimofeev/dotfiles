@@ -59,7 +59,8 @@
       user-mail-adress "btimofeev@emunix.org")
 
 ;; Настраиваем компоненты GUI
-(tool-bar-mode     -1) ;; выключить тулбар
+(tool-bar-mode -1) ;; выключить тулбар
+(menu-bar-mode -1) ;; выключить меню
 (scroll-bar-mode -1) ;; выключить скроллбар
 (blink-cursor-mode -1) ;; не мигать курсором
 (setq use-dialog-box     nil) ;; не показывать диалоги
