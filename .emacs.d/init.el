@@ -143,25 +143,28 @@
 (use-package saveplace
   :init (save-place-mode 1))
 
+;; Диалог выбора буффера
 (use-package bs
-  :bind ("C-x C-b" . bs-show)) ;; диалог выбора буфера
-
-(use-package ibuffer
-  :bind ("<f2>" . ibuffer)) ;; отдельный список буферов
+  :bind ("C-x C-b" . bs-show))
 
 ;; Перемещаться между окнами через M-стрелки
 (if (equal nil (equal major-mode 'org-mode))
     (windmove-default-keybindings 'meta))
 
-;; IDO
-(use-package ido
-  :init (ido-mode t)
-  :config
-    (when (system-is-windows) ;; отключаем часть, т.к. в Windows 7 подвисает
-      (setq ido-enable-last-directory-history nil)
-      (setq ido-record-commands nil)
-      (setq ido-max-work-directory-list 0)
-      (setq ido-max-work-file-list 0)))
+;; Helm
+(use-package helm
+  :ensure t
+  :bind (("M-x" . helm-M-x)
+         ("C-x C-f" . helm-find-files)
+         ("C-x f" . helm-recentf)
+         ("M-y" . helm-show-kill-ring)
+	 ("C-x r b" . helm-filtered-bookmarks)
+         ("C-x b" . helm-mini))
+  :config (progn
+	    (setq helm-buffers-fuzzy-matching t)
+	    (setq helm-recentf-fuzzy-match t)
+	    (setq helm-M-x-fuzzy-match t)
+            (helm-mode 1)))
 
 ;; Dired+
 (use-package dired+
