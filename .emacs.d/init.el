@@ -15,7 +15,7 @@
      ("http" . "192.168.100.1:3128")
      ("https" . "192.168.100.1:3128"))))
 
-;; Добавляем репозирории
+;; Добавляем репозитории
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
 ;;(add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
@@ -124,11 +124,6 @@
     )
   )
 (global-set-key [f11] 'pa23-change-coding)
-
-
-;; Удаляем последнее слово по C-w, регион по C-x C-k
-(global-set-key (kbd "C-w") 'backward-kill-word)
-(global-set-key (kbd "C-x C-k") 'kill-region)
 
 ;; Отображать номера строк
 (if (version< emacs-version "26.1")
