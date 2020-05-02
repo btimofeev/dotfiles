@@ -61,11 +61,11 @@
 (defalias 'yes-or-no-p 'y-or-n-p) ;; принимать y/n вместо yes/no
 (setq frame-title-format "GNU Emacs: %b") ;; отображать имя буфера в строке заголовка
 (setq inhibit-startup-screen t) ;; не показывать экран помощи при старте
-(fringe-mode '(8 . 0)) ;; органичитель текста только слева
+(fringe-mode 0) ;; отключить полосы справа и слева отображающие перенос строки
 (size-indication-mode t) ;; отображать размер файла в строке статуса
 (global-visual-line-mode t) ;; переносить строки во всех буферах
 
-(global-hl-line-mode 1) ;; подсвечивать текущую строку
+(global-hl-line-mode -1) ;; не подсвечивать текущую строку
 (show-paren-mode t) ;; подсвечивать скобки {}, [], ()
 (electric-pair-mode    1) ;; автоматически закрывать скобки {}, [], ()
 (delete-selection-mode t) ;; удалять выделенный текст при вводе текста
@@ -82,7 +82,8 @@
 
 ;; Цветовая тема
 (add-to-list 'custom-theme-load-path "~/.emacs.d/themes/")
-(load-theme 'sanityinc-tomorrow-eighties t)
+;;(load-theme 'sanityinc-tomorrow-eighties t)
+(load-theme 'sanityinc-tomorrow-day t)
 
 (set-language-environment 'utf-8) ;; кодировка текста
 
@@ -116,21 +117,6 @@
     )
   )
 (global-set-key [f11] 'pa23-change-coding)
-
-;; Отображать номера строк
-(if (version< emacs-version "26.1")
-    (use-package linum
-      :hook ((prog-mode . linum-mode)  ;; только для кода
-             (text-mode . linum-mode)) ;; и обычного текста, ибо просмотр pdf тормозит из-за этого режима
-      :config
-      (progn
-        (line-number-mode   t)
-        (global-linum-mode  0)
-        (column-number-mode t)
-        (setq linum-format " %d")))
-  ;; в емаксе 26.1 и выше используем более быструю встроенную нумерацию строк:
-  (global-display-line-numbers-mode))
-
 ;; Сохранять и восстанавливать позицию курсора в файле
 (use-package saveplace
   :init (save-place-mode 1))
