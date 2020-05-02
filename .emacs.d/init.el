@@ -46,14 +46,6 @@
 ;; Директория для бэкапов
 (setq backup-directory-alist `(("." . "~/.emacs.d/bakups")))
 
-;; Запускаем Emacs как сервер
-;; (use-package server
-;;   :ensure t
-;;   :init (server-mode 1)
-;;   :config
-;;   (unless (server-running-p)
-;;     (server-start)))
-
 ;; Заполняем личные данные
 (setq user-full-name   "Boris Timofeev"
       user-mail-adress "btimofeev@emunix.org")
@@ -224,13 +216,6 @@
 ;; nov.el epub reader
 (use-package nov
   :mode ("\\.epub$" . nov-mode))
-
-;; easy-hugo
-(use-package easy-hugo
-  :bind ("C-c C-e" . easy-hugo)
-  :init (setq easy-hugo-basedir "~/dev/web/emunix-hugo/")
-        (setq easy-hugo-url "https://emunix.org")
-        (setq easy-hugo-previewtime "300"))
 
 ;; emms
 (use-package emms-setup
