@@ -129,6 +129,16 @@
 (if (equal nil (equal major-mode 'org-mode))
     (windmove-default-keybindings 'meta))
 
+;; Автодополнение 
+(use-package company
+  :ensure t
+  :init (global-company-mode 1)
+  :config
+  (setq company-idle-delay 0.3)
+  (define-key company-active-map (kbd "C-n") 'company-select-next)
+  (define-key company-active-map (kbd "C-p") 'company-select-previous)
+  (define-key company-active-map (kbd "C-d") 'company-show-doc-buffer))
+
 ;; Helm
 (use-package helm
   :ensure t
