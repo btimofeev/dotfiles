@@ -46,6 +46,11 @@
 ;; Директория для бэкапов
 (setq backup-directory-alist `(("." . "~/.emacs.d/bakups")))
 
+;; Устанавливаем отдельный файл для custom настроек
+(setq custom-file "~/.emacs.d/custom.el")
+(when (file-exists-p custom-file)
+  (load custom-file))
+
 ;; Заполняем личные данные
 (setq user-full-name   "Boris Timofeev"
       user-mail-adress "btimofeev@emunix.org")
@@ -177,7 +182,9 @@
 (use-package fb2-mode
   :load-path "~/.emacs.d/lisp/fb2-mode"
   :mode ("\\.fb2$" . fb2-mode)
-  :ensure nil)
+  :ensure nil
+  :config
+  (setq fb2-replace-hard-space t))
 
 ;; nov.el epub reader
 (use-package nov
@@ -330,27 +337,3 @@
     )
   )
 (global-set-key [f11] 'pa23-change-coding)
-
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(blink-cursor-mode nil)
- '(custom-safe-themes
-   (quote
-    ("d9129a8d924c4254607b5ded46350d68cc00b6e38c39fc137c3cfb7506702c12" "628278136f88aa1a151bb2d6c8a86bf2b7631fbea5f0f76cba2a0079cd910f7d" "c7a9a68bd07e38620a5508fef62ec079d274475c8f92d75ed0c33c45fbe306bc" default)))
- '(org-agenda-files (quote ("~/Documents/org/work.org")))
- '(package-selected-packages
-   (quote
-    (emojify use-package-secrets quelpa-use-package quelpa free-keys try jabber yasnippet yasnippet-snippets slime-company ac-slime slime elfeed love-minor-mode gnugo emms groovy-mode gradle-mode which-key pkgbuild-mode use-package reverse-im monokai-theme ducpel dracula-theme dired+ diminish color-theme-sanityinc-tomorrow))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(default ((t (:family "Hack" :foundry "SRC" :slant normal :weight normal :height 98 :width normal))))
- '(org-level-1 ((t (:inherit default :foreground "#FD971F" :height 1.0))))
- '(org-level-2 ((t (:inherit default :foreground "#A6E22E" :height 1.0))))
- '(org-level-3 ((t (:inherit default :foreground "#66D9EF" :height 1.0))))
- '(org-level-4 ((t (:inherit default :foreground "#E6DB74" :height 1.0)))))
