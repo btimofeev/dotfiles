@@ -178,6 +178,11 @@
   :load-path "~/.emacs.d/lisp/fb2-mode"
   :mode ("\\.fb2$" . fb2-mode)
   :ensure nil
+  :init
+  (add-hook 'fb2-mode-hook (lambda ()
+			     (text-scale-adjust 2)
+			     (require 'olivetti)
+			     (olivetti-mode)))
   :config
   (setq fb2-replace-hard-space t))
 
