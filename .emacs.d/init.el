@@ -104,6 +104,12 @@
 (if (equal nil (equal major-mode 'org-mode))
     (windmove-default-keybindings 'meta))
 
+;; Ace-jump - быстрое перемещение к любому символу на экране
+(use-package ace-jump-mode
+  :ensure    t
+  :bind      (("C-." . #'ace-jump-mode)
+	      ("C-c SPC" . #'ace-jump-line-mode)))
+
 ;; Автодополнение 
 (use-package company
   :ensure t
