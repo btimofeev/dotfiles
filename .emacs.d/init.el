@@ -1,19 +1,8 @@
-;; Определяем операционную систему
-(defun system-is-linux()
-    (string-equal system-type "gnu/linux"))
-
-(defun system-is-mac()
-    (string-equal system-type "darwin"))
-
-(defun system-is-windows()
-    (string-equal system-type "windows-nt"))
-
 ;; Настраиваем адрес прокси-сервера
-(when (system-is-windows)
-  (setq url-proxy-services
-    '(("no_proxy" . "^\\(localhost\\|10.*\\)")
-     ("http" . "192.168.100.1:3128")
-     ("https" . "192.168.100.1:3128"))))
+;; (setq url-proxy-services
+;;       '(("no_proxy" . "^\\(localhost\\|10.*\\)")
+;; 	("http" . "192.168.100.1:3128")
+;; 	("https" . "192.168.100.1:3128")))
 
 ;; Добавляем репозитории
 (require 'package)
