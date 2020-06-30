@@ -93,11 +93,11 @@
 (if (equal nil (equal major-mode 'org-mode))
     (windmove-default-keybindings 'meta))
 
-;; Ace-jump - быстрое перемещение к любому символу на экране
-(use-package ace-jump-mode
+;; avy - быстрое перемещение к любому символу на экране
+(use-package avy
   :ensure    t
-  :bind      (("C-." . #'ace-jump-mode)
-	      ("C-c SPC" . #'ace-jump-line-mode)))
+  :bind      (("C-." . 'avy-goto-char)
+	      ("C-c SPC" . 'avy-goto-line)))
 
 ;; Автодополнение 
 (use-package company
