@@ -22,12 +22,6 @@
 (eval-when-compile
   (require 'use-package))
 (require 'bind-key)
-;;(setq use-package-always-ensure t) ;; автоматически устанавливаем остальные пакеты, при необходимости
-
-;; Пробуем пакеты без установки
-(use-package try
-  :ensure t
-  :defer t)
 
 ;; Директория для дополнительных модулей
 (add-to-list 'load-path "~/.emacs.d/lisp")
@@ -46,13 +40,14 @@
 
 ;; Настраиваем компоненты GUI
 (tool-bar-mode -1) ;; выключить тулбар
-(menu-bar-mode -1) ;; выключить меню
+;(menu-bar-mode -1) ;; выключить меню
 (scroll-bar-mode -1) ;; выключить скроллбар
-(blink-cursor-mode -1) ;; не мигать курсором
+;(blink-cursor-mode -1) ;; не мигать курсором
 (setq use-dialog-box     nil) ;; не показывать диалоги
 (setq redisplay-dont-pause t) ;; не прерывать перересовку экрана при событиях ввода 
 (setq ring-bell-function 'ignore) ;; не мигать экраном
 (defalias 'yes-or-no-p 'y-or-n-p) ;; принимать y/n вместо yes/no
+(global-unset-key (kbd "C-z")) ;; отключаем C-z, что бы gui емакс не фризился
 (setq frame-title-format "GNU Emacs: %b") ;; отображать имя буфера в строке заголовка
 (setq inhibit-startup-screen t) ;; не показывать экран помощи при старте
 (fringe-mode 0) ;; отключить полосы справа и слева отображающие перенос строки
@@ -64,6 +59,7 @@
 (electric-pair-mode    1) ;; автоматически закрывать скобки {}, [], ()
 (delete-selection-mode t) ;; удалять выделенный текст при вводе текста
 (setq-default indent-tabs-mode t) ;; конвертировать табы в пробелы (t - нет, nil - да)
+(setq calendar-week-start-day 1) ;; календарь начинается с понедельника
 
 ;; определяем вид и количество отступов для c-кода
 (setq c-default-style "linux" 
@@ -76,8 +72,9 @@
 
 ;; Цветовая тема
 (add-to-list 'custom-theme-load-path "~/.emacs.d/themes/")
+(load-theme 'leuven t)
 ;;(load-theme 'sanityinc-tomorrow-eighties t)
-(load-theme 'sanityinc-tomorrow-day t)
+;;(load-theme 'sanityinc-tomorrow-day t)
 
 (set-language-environment 'utf-8) ;; кодировка текста
 
@@ -89,15 +86,9 @@
 (use-package bs
   :bind ("C-x C-b" . bs-show))
 
-;; Перемещаться между окнами через M-стрелки
-(if (equal nil (equal major-mode 'org-mode))
-    (windmove-default-keybindings 'meta))
-
-;; avy - быстрое перемещение к любому символу на экране
-(use-package avy
-  :ensure    t
-  :bind      (("C-." . 'avy-goto-char)
-	      ("C-c SPC" . 'avy-goto-line)))
+;; Перемещаться между окнами через M-стрелки (конфлликтует с org-mode, проверка if не работает)
+;;(if (equal nil (equal major-mode 'org-mode))
+;;    (windmove-default-keybindings 'meta))
 
 ;; Автодополнение 
 (use-package company
@@ -109,28 +100,6 @@
   (define-key company-active-map (kbd "C-p") 'company-select-previous)
   (define-key company-active-map (kbd "C-d") 'company-show-doc-buffer))
 
-;; Helm
-(use-package helm
-  :ensure t
-  :bind (("M-x" . helm-M-x)
-         ("C-x C-f" . helm-find-files)
-         ("C-x f" . helm-recentf)
-         ("M-y" . helm-show-kill-ring)
-	 ("C-x r b" . helm-filtered-bookmarks)
-         ("C-x b" . helm-mini))
-  :config (progn
-	    (setq helm-buffers-fuzzy-matching t)
-	    (setq helm-recentf-fuzzy-match t)
-	    (setq helm-M-x-fuzzy-match t)
-            (helm-mode 1)))
-
-;; Dired+
-(use-package dired+
-  :init
-  (progn
-    (setq diredp-hide-details-initially-flag nil))
-  :config
-  (diredp-toggle-find-file-reuse-dir 1))
 
 ;; Org-mode
 (use-package org
@@ -226,7 +195,8 @@
   :config
   (setq elfeed-feeds '("http://love2d.org/releases.xml"
 			       "https://emunix.org/index.xml"
-			       "https://habr.com/ru/rss/hub/android_dev/all/?fl=ru%2Cen"))
+			       "https://habr.com/ru/rss/hub/android_dev/all/?fl=ru%2Cen"
+			       "https://fi5t.xyz/index.xml"))
   (setq elfeed-sort-order 'ascending))
 
 ;; slime
@@ -253,41 +223,13 @@
          ("\\.markdown\\'" . markdown-mode))
   :init (setq markdown-command "multimarkdown"))
 
-(global-unset-key (kbd "C-x C-j")) ;; чтобы dired не конфликтовал с jabber
-
-;; jabber.el
-(use-package jabber
-  :defer t
-  :config
-  (setq jabber-history-enabled t
-        jabber-use-global-history nil
-        fsm-debug nil)
-  :bind
-  ("C-x C-j C-c" . jabber-connect-all)
-  :custom
-  (jabber-auto-reconnect t)
-  (jabber-chat-buffer-format "*-jc-%n-*")
-  (jabber-groupchat-buffer-format "*-jg-%n-*")
-  (jabber-chat-foreign-prompt-format "▼ [%t] %n> ")
-  (jabber-chat-local-prompt-format "▲ [%t] %n> ")
-  (jabber-muc-colorize-foreign t)
-  (jabber-muc-private-buffer-format "*-jmuc-priv-%g-%n-*")
-  (jabber-rare-time-format "%e %b %Y %H:00")
-  (jabber-resource-line-format "   %r - %s [%p]")
-  (jabber-roster-buffer "*-jroster-*")
-  (jabber-roster-line-format "%c %-17n")
-  (jabber-roster-show-title nil)
-  (jabber-roster-sort-functions (quote (jabber-roster-sort-by-status jabber-roster-sort-by-displayname jabber-roster-sort-by-group)))
-  (jabber-show-offline-contacts nil)
-  (jabber-show-resources nil))
-
 ;; Эмоджи
-(use-package emojify
-  :config (if (display-graphic-p)
-               (setq emojify-display-style 'image)
-             (setq emojify-display-style 'unicode)
-             )
-  :init (global-emojify-mode 1))
+;; (use-package emojify
+;;   :config (if (display-graphic-p)
+;;                (setq emojify-display-style 'image)
+;;              (setq emojify-display-style 'unicode)
+;;              )
+;;   :init (global-emojify-mode 1))
 
 ;; free-keys помогает найти незанятые сочетания клавиш
 ;; Если запускать как C-u M-x free-keys то можно указать префикс вида C-x
@@ -295,13 +237,6 @@
   :ensure t
   :defer t
   :commands free-keys)
-
-;; Раскрашиваем вывод комманды M-x man
-(use-package man
-  :defer t
-  :custom-face
-  (Man-overstrike ((t (:inherit font-lock-type-face :bold t))))
-  (Man-underline ((t (:inherit font-lock-keyword-face :underline t)))))
 
 ;; Olivetti выравнивает текст по центру экрана
 (use-package olivetty
